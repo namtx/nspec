@@ -1,8 +1,9 @@
 class Example
-  attr_reader :context_name
+  attr_reader :context_name, :test_results
 
   def initialize context_name, &block
     @context_name = context_name
+    @test_results = []
     instance_eval &block
   end
 
@@ -12,7 +13,7 @@ class Example
   end
 
   def to expectation
-    p expectation.call result
+    test_results << expectation.call(result)
     self
   end
 
@@ -21,10 +22,16 @@ class Example
   end
 
   def not_to expectation
-    p !expectation.call(result)
+    test_results << !expectation.call(result)
     self
+  end
+
+  def instance_of expectation
+    proc { |instance| instance.is_a?(expectation) }
   end
 
   private
   attr_reader :result
+
+  alias :to_be :to
 end
