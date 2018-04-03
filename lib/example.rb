@@ -26,8 +26,12 @@ class Example
     self
   end
 
-  def instance_of expectation
+  def be_an_instance_of expectation
     proc { |instance| instance.is_a?(expectation) }
+  end
+
+  def match expectation
+    proc { |str| str =~ expectation }
   end
 
   private
